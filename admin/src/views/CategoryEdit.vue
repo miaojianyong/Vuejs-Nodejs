@@ -8,6 +8,21 @@
 		native 原生的表单 prevent 表示阻止默认提交不要跳转页面 -->
 		<el-form label-width="120px" 
 				@submit.native.prevent="save">
+			<!-- 上级分类 -->
+			<el-form-item label="上级分类">
+				<!-- v-model实现双向绑定数据 -->
+				<el-select v-model="model.parent">
+					<!-- v-for 循环parents中的所有分类数据
+					:key="itet._id" 使用v-for添加key增加vue的性能
+					:label 显示的内容
+					:value 选择时关联的id -->
+					<el-option v-for="item in parents"
+							:key="item._id" 
+							:label="item.name"
+							:value="item._id"></el-option>
+				</el-select>
+			</el-form-item>
+			<!-- 新建分类 -->
 			<el-form-item label="名称">
 				<!-- v-model实现双向绑定数据 -->
 				<el-input v-model="model.name"></el-input>
@@ -25,7 +40,8 @@
 		},
 		data() {
 			return {
-				model: {} // 输入框中的数据
+				model: {}, // 输入框中的数据 保存的是分类id 即唯一性的东西
+				parents: [], // 保存上级分类下拉菜单选项 
 			}
 		},
 		methods: {
@@ -51,9 +67,15 @@
 			async fetch() { // 请求数据 获取输入框中的数据
 				const res = await this.$http.get(`categories/${this.id}`);
 				this.model = res.data; // 把获取的数据给上述model
+			},
+			async fetchParents() { // 获取所有现有分类 即下拉菜单中的选项
+				const res = await this.$http.get(`categories`);
+				this.parents = res.data; // 把获取的数据给上述parents
 			}
 		},
 		created() { // 组件创建成功 就执行的代码
+			// 执行上述定义的获取全部分类数据方法
+			this.fetchParents();
 			// 获取输入框数据 即如果有id参数，才执行后面的方法
 			this.id && this.fetch(); // 调用上述获取输入框中的数据
 		}

@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 // 定义模型
 const schema = new mongoose.Schema({
   name: {
-    type: String
+    type: String,
+  },
+  parent: { // 分类的parent字段
+    type: mongoose.SchemaTypes.ObjectId, // MongoDB数据库的id
+    ref: 'Category' // 关联的模型
   }
 })
 // 导出分类模型

@@ -6,6 +6,7 @@
       prop="_id" 表示数据创建后在数据库默认生成的id 
       prop="name" 表示数据的name字段，name是创建分类模型时编写的-->
       <el-table-column prop="_id" label="ID" width="240"></el-table-column>
+      <el-table-column prop="parent.name" label="上级分类"></el-table-column>
       <el-table-column prop="name" label="分类名称"></el-table-column>
       <el-table-column
           fixed="right"

@@ -34,7 +34,8 @@ module.exports = app => {
   router.get('/categories', async (req, res) => {
     // 获取数据库中的数据
     // limit(10) 表示限制为10条数据
-    const items = await Category.find().limit(10);
+    // populate('parent') 表示关联/取出 查询的指定字段
+    const items = await Category.find().populate('parent').limit(10);
     res.send(items); // 发送给前端
   });
   // 3. 分类列表编辑页面 接口
