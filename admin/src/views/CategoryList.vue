@@ -41,7 +41,7 @@
       async fetch() {
         // 获取接口传递来的数据
         // get请求(categories)接口的地址
-        const res = await this.$http.get('categories');
+        const res = await this.$http.get('rest/categories');
         // 把数据给上述data中保存的列表数据
         this.items = res.data;
       },
@@ -61,7 +61,7 @@
           type: 'warning'
         }).then(async () => {
           // 网络请求
-          const res = await this.$http.delete(`categories/${row._id}`)
+          const res = await this.$http.delete(`rest/categories/${row._id}`)
           this.$message({
             type: 'success',
             message: '删除成功!'

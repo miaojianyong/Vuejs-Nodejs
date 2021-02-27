@@ -51,10 +51,10 @@
 				// this.model 即上述data中保存的输入框中的数据
 				if (this.id) { // 如果有id参数
 					// 给服务器端 传递id参数
-					res = await this.$http.put(`categories/${this.id}`, this.model);
+					res = await this.$http.put(`rest/categories/${this.id}`, this.model);
 				} else { // 如果没有id参数
 					// 没有id参数 即是新增 就是新建分类
-					res = await this.$http.post('categories', this.model);
+					res = await this.$http.post('rest/categories', this.model);
 				}
 				// 分类数据创建完成后，跳转到分类列表
 				this.$router.push('/categories/list');
@@ -65,11 +65,11 @@
 				})
 			},
 			async fetch() { // 请求数据 获取输入框中的数据
-				const res = await this.$http.get(`categories/${this.id}`);
+				const res = await this.$http.get(`rest/categories/${this.id}`);
 				this.model = res.data; // 把获取的数据给上述model
 			},
 			async fetchParents() { // 获取所有现有分类 即下拉菜单中的选项
-				const res = await this.$http.get(`categories`);
+				const res = await this.$http.get(`rest/categories`);
 				this.parents = res.data; // 把获取的数据给上述parents
 			}
 		},
