@@ -6,6 +6,8 @@ const app = express();
 app.use(require('cors')());
 // 添加中间件
 app.use(express.json());
+// 托管静态资源文件 static表示静态的
+app.use('/uploads', express.static(__dirname + '/uploads'));
 // 导入路由后台路由  
 // (app)表示把app实例传递给该文件.在该文件内部就可使用
 require('./routes/admin')(app);

@@ -5,6 +5,10 @@ import Main from '../views/Main.vue'
 import CategoryEdit from '../views/CategoryEdit.vue';
 // 引入分类列表页面
 import CategoryList from '../views/CategoryList.vue';
+// 引入新建物品页面
+import ItemEdit from '../views/ItemEdit.vue';
+// 引入物品列表页面
+import ItemList from '../views/ItemList.vue';
 
 Vue.use(VueRouter)
 
@@ -26,6 +30,19 @@ const routes = [
         path: '/categories/edit/:id',
         props: true, // 表示传递参数 即id参数传递给CategoryEdit页面
         component: CategoryEdit
+      },
+      { // 新建物品 子路由
+        path: '/items/create',
+        component: ItemEdit
+      },
+      { // 物品列表 子路由
+        path: '/items/list',
+        component: ItemList
+      },
+      { // 物品列表 的编译页面 子路由
+        path: '/items/edit/:id',
+        props: true,
+        component: ItemEdit
       },
     ]
   },

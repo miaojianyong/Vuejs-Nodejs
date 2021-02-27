@@ -67,5 +67,18 @@ module.exports = app => {
     // req.Model 表示给请求对象上 挂载一个Model
     req.Model = require(`../../models/${modelName}`);
     next();
-  }, router)
+  }, router);
+/* 上传图片文件的接口 */
+  // 引入处理上传文件从模块
+  const multer = require('multer');
+  // 定义上传中间件 __dirname 表示决定地址 意思是当前文件所在文件夹
+  const upload = multer({
+    dest: __dirname + '/../../uploads', // 表示目标地址 即存放到什么位置
+  });
+  // upload.single('file') 表示接受单个文件的上传 file是字段名
+  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+    const file = req.file; // res.file 是加上upload.single('file')中间件才有的
+    file.url = `http://localhost:3000/uploads/${file.filename}`;
+    res.send(file);
+  });
 }

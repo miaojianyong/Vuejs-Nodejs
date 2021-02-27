@@ -10,6 +10,12 @@
             <el-menu-item index="/categories/create">新建分类</el-menu-item>
             <el-menu-item index="/categories/list">分类列表</el-menu-item>
           </el-menu-item-group>
+          <!-- 物品 -->
+          <el-menu-item-group>
+            <template slot="title">物品</template>
+            <el-menu-item index="/items/create">新建物品</el-menu-item>
+            <el-menu-item index="/items/list">物品列表</el-menu-item>
+          </el-menu-item-group>
         </el-submenu>
       </el-menu>
     </el-aside>
@@ -29,14 +35,6 @@
       
       <el-main>
         <router-view></router-view>
-				<!-- <el-table :data="tableData">
-				  <el-table-column prop="date" label="日期" width="140">
-				  </el-table-column>
-				  <el-table-column prop="name" label="姓名" width="120">
-				  </el-table-column>
-				  <el-table-column prop="address" label="地址">
-				  </el-table-column>
-				</el-table> -->
       </el-main>
     </el-container>
   </el-container>
