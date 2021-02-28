@@ -9,6 +9,10 @@ import CategoryList from '../views/CategoryList.vue';
 import ItemEdit from '../views/ItemEdit.vue';
 // 引入物品列表页面
 import ItemList from '../views/ItemList.vue';
+// 引入新建英雄页面
+import HeroEdit from '../views/HeroEdit.vue';
+// 引入英雄列表页面
+import HeroList from '../views/HeroList.vue';
 
 Vue.use(VueRouter)
 
@@ -43,6 +47,19 @@ const routes = [
         path: '/items/edit/:id',
         props: true,
         component: ItemEdit
+      },
+      { // 新建英雄 子路由
+        path: '/heroes/create',
+        component: HeroEdit
+      },
+      { // 英雄列表 子路由
+        path: '/heroes/list',
+        component: HeroList
+      },
+      { // 英雄列表 的编译页面 子路由
+        path: '/heroes/edit/:id',
+        props: true,
+        component: HeroEdit
       },
     ]
   },
