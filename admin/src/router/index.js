@@ -17,6 +17,10 @@ import HeroList from '../views/HeroList.vue';
 import ArticleEdit from '../views/ArticleEdit.vue';
 // 引入文章列表页面
 import ArticleList from '../views/ArticleList.vue';
+// 引入新建广告位页面
+import AdEdit from '../views/AdEdit.vue';
+// 引入广告位列表页面
+import AdList from '../views/AdList.vue';
 
 Vue.use(VueRouter)
 
@@ -77,6 +81,19 @@ const routes = [
         path: '/articles/edit/:id',
         props: true,
         component: ArticleEdit
+      },
+      { // 新建文章 子路由
+        path: '/ads/create',
+        component: AdEdit
+      },
+      { // 文章列表 子路由
+        path: '/ads/list',
+        component: AdList
+      },
+      { // 文章列表 的编译页面 子路由
+        path: '/ads/edit/:id',
+        props: true,
+        component: AdEdit
       },
     ]
   },
