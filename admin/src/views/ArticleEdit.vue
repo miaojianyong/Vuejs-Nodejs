@@ -17,7 +17,10 @@
 				<el-input v-model="model.title"></el-input>
 			</el-form-item>
 			<el-form-item label="详情">
-				<el-input v-model="model.body"></el-input>
+				<!-- 使用富文本组件 -->
+				<vue-editor v-model="model.body"
+				useCustomImageHandler 
+				@image-added="handleImageAdded"></vue-editor>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" native-type="submit">保存</el-button>
@@ -26,9 +29,14 @@
 	</div>
 </template>
 <script>
+	// 引用富文本编辑组件
+	import { VueEditor } from 'vue2-editor';
 	export default {
 		props: { // 接收参数
 			id: {} // 接收地址栏中传递来的id参数
+		},
+		components: { // 注册组件
+			VueEditor,
 		},
 		data() {
 			return {
@@ -37,6 +45,18 @@
 			}
 		},
 		methods: {
+			// 处理富文本组件的图片上传
+			async handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+				const formData = new FormData(); // 提交表单数据
+				// file对应我上传文件时名称 服务端接收的字段名也是file
+				formData.append("file", file);
+				// 发起请求
+				const res = await this.$http.post('upload', formData);
+				// Editor 表示编辑器对象 insertEmbed 插入元素
+				// 1>cursorLocation光标位置 2>"image"插入的图片 3>图片地址
+				Editor.insertEmbed(cursorLocation, "image", res.data.url);
+				resetUploader(); // 重置上传器
+    	},
 			async save() {
 				let res // 定义变量
 				if (this.id) { // 如果有id参数
