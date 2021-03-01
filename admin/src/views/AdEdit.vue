@@ -5,6 +5,33 @@
 			<el-form-item label="名称">
 				<el-input v-model="model.name"></el-input>
 			</el-form-item>
+			<el-form-item label="广告">
+				<el-button size="small" @click="model.items.push({})">
+					<i class="el-icon-plus"></i> 添加广告
+				</el-button>
+					<el-row type="flex" style="flex-wrap: wrap;">
+						<!-- :md="24" 表示全宽即一行显示一条 -->
+						<el-col :md="24" v-for="(item, i) in model.items" :key="i">
+							<el-form-item label="跳转链接(URL)">
+								<el-input v-model="item.url"></el-input>
+							</el-form-item>
+							<el-form-item label="图片" style="margin-top: 0.5rem;">
+								<el-upload
+									class="avatar-uploader"
+									:action="$http.defaults.baseURL + '/upload'"
+									:show-file-list="false"
+									:on-success="res => $set(item, 'image', res.url)">
+									<img v-if="item.image" :src="item.image" class="avatar">
+									<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+								</el-upload>
+							</el-form-item>
+							<el-form-item>
+								<el-button size="small" type="danger"
+								@click="model.items.splice(i, 1)">删除</el-button>
+							</el-form-item>
+						</el-col>
+					</el-row>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" native-type="submit">保存</el-button>
 			</el-form-item>
@@ -18,7 +45,9 @@
 		},
 		data() {
 			return {
-				model: {}, // 输入框中的数据 保存的是分类id 即唯一性的东西
+				model: {
+					items: [], // 存放多个广告数据
+				},
 			}
 		},
 		methods: {
@@ -37,7 +66,7 @@
 			},
 			async fetch() { // 请求数据 获取输入框中的数据
 				const res = await this.$http.get(`rest/ads/${this.id}`);
-				this.model = res.data; // 把获取的数据给上述model
+				this.model = Object.assign({}, this.model, res.data);
 			},
 		},
 		created() { // 组件创建成功 就执行的代码
