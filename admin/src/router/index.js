@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
+// 引入登录页面文件
+import Login from '../views/Login.vue'
 // 引入新建分类页面
 import CategoryEdit from '../views/CategoryEdit.vue';
 // 引入分类列表页面
@@ -29,6 +31,11 @@ import AdminUserList from '../views/AdminUserList.vue';
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: Login, // 对应页面组件 
+  },
   {
     path: '/',
     name: 'Main',
