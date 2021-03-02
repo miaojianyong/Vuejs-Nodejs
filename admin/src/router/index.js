@@ -21,6 +21,10 @@ import ArticleList from '../views/ArticleList.vue';
 import AdEdit from '../views/AdEdit.vue';
 // 引入广告位列表页面
 import AdList from '../views/AdList.vue';
+// 引入新建管理员页面
+import AdminUserEdit from '../views/AdminUserEdit.vue';
+// 引入管理员列表页面
+import AdminUserList from '../views/AdminUserList.vue';
 
 Vue.use(VueRouter)
 
@@ -94,6 +98,19 @@ const routes = [
         path: '/ads/edit/:id',
         props: true,
         component: AdEdit
+      },
+      { // 新建文章 子路由
+        path: '/admin_users/create',
+        component: AdminUserEdit
+      },
+      { // 文章列表 子路由
+        path: '/admin_users/list',
+        component: AdminUserList
+      },
+      { // 文章列表 的编译页面 子路由
+        path: '/admin_users/edit/:id',
+        props: true,
+        component: AdminUserEdit
       },
     ]
   },
