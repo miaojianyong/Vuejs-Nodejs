@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
-// 引入登录页面文件
-import Login from '../views/Login.vue'
+/* 使用懒加载方式 引入登录页面文件 */
+const Login = () => import('../views/Login.vue');
 // 引入新建分类页面
 import CategoryEdit from '../views/CategoryEdit.vue';
 // 引入分类列表页面
@@ -124,7 +124,10 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history' // 配置模式
+  /* 把：http://localhost:8080/#/categories/create
+  改为：http://localhost:8080/categories/create */
 })
 
 export default router
