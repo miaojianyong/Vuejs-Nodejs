@@ -26,9 +26,19 @@
       }
     },
     methods: {
-      login() { // 监听登录方法
-        // 请求接口
-        console.log(this.model); // 输出用户输入的内容
+      async login() { // 监听登录方法
+        // 请求接口 1>'login'请求地址 2>this.model 传递的参数用户输入的内容
+        const res = await this.$http.post('login', this.model);
+        // 在浏览器中存储服务器返回的token
+        localStorage.token = res.data.token;
+        // sessionStorage 表示浏览器关闭后就没有token了
+        // localStorage 变量浏览器关闭后在打开会有存储
+        // console.log(res.data); 服务器端返回的数据 如‘ok’
+        this.$router.push('/'); // 页面跳转到根路径
+        this.$message({ // 提示信息
+          type: 'success',
+          message: '登录成功'
+        })
       }
     }
   }

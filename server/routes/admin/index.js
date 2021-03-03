@@ -81,4 +81,37 @@ module.exports = app => {
     file.url = `http://localhost:3000/uploads/${file.filename}`;
     res.send(file);
   });
+/* 登陆接口 */
+  app.post('/admin/api/login', async (req, res) => {
+    // res.send('ok'); 给客户端响应的内容
+    // req.body 表示客户端传递过来的数据
+    const { username, password } = req.body; // 结构客户端传递的数据
+    // 1. 根据用户名去数据库找用户 
+    const AdminUser = require('../../models/AdminUser'); // 导入用户模型
+    // 根据上述传递过来的用户名在数据库中查找用户
+    // select('+password') 因为我们在用户模型中设置了select为false故此处需强制选取
+    const user = await AdminUser.findOne({ username }).select('+password');
+    if (!user) { // 如果找不到用户
+      // 这里统一 422表示 客户端提交的数据有问题
+      return res.status(422).send({ // 返回状态码 和 提示数据
+        message: '用户不存在'
+      })
+    }
+    // 2. 校验密码
+    // 1>导入密码加密模块 2>使用compareSync方法比较明文和密文是否匹配 返回布尔值
+    // compareSync方法 参数1是明文密码即用户传递过的，参数2是数据库中的密文密码
+    const isValid = require('bcrypt').compareSync(password, user.password);
+    if (!isValid) { // 如果密码不对
+      return res.status(422).send({
+        message: '密码错误'
+      })
+    }
+    // 3. 返回token
+    const jwt = require('jsonwebtoken'); // 导入返回token的模块
+    // 使用sign生成token
+    // 1> id: user._id 表示id是用户的id
+    // 2> app.get('secret')获取app上的变量 密钥
+    const token = jwt.sign({ id: user._id }, app.get('secret'));
+    res.send({ token }); // 把生成的token发送给客户端
+  });
 }
