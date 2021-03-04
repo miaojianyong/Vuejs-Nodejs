@@ -15,9 +15,10 @@
 				里面的方法 表示把返回的值赋值给model.icon，即图片地址-->
 				<el-upload
 					class="avatar-uploader"
-					:action="$http.defaults.baseURL + '/upload'"
+					:action="uploadUrl"
 					:show-file-list="false"
-					:on-success="afterUpload">
+					:on-success="afterUpload"
+					:headers="getAuthHeaders()">
 					<!-- 如果有上传的图片就显示 该图片地址 -->
 					<img v-if="model.icon" :src="model.icon" class="avatar">
 					<!-- 没有上传的图片就显示 上传的图片的图标 -->
