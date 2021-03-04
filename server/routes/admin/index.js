@@ -13,8 +13,6 @@ module.exports = app => {
     // 在下述就可使用 req.params获取数据
   });
 
-  // 导入分类模型
-  // const Category = require('../../models/Category');
   // 1. 向子路由身上添加方法 即监听post请求 新建分类数据 接口
   router.post('/', async (req, res) => { // 创建资源
     // 创建分类数据 即向数据库插入数据
@@ -42,33 +40,7 @@ module.exports = app => {
   });
 
   // 2. 分类列表数据 接口
-  router.get('/', async (req, res, next) => { // 添加资源列表中间件
-    // 校验用户是否登录
-    // 1>获取前端设置的请求头
-    /* 前端的网络请求函数中，设置了'Bearer '+... 
-    故需使用split()方法分隔字符串, 使用‘ ’即空格分隔 完成后是个数组
-    pop()方法 表示提取最后一个元素 */
-    const token = String(req.headers.authorization || '').split(' ').pop();
-    // 如果token不存在报错
-    assert(token, 401, '请提供jwt token'); // 真实项目统一用 请先登录 提示
-    // 2>提取token数据 参数1是上述token 参数2是密钥
-    /* const tokenData = jwt.verify(token, app.get('secret'));
-    console.log(tokenData); */
-    /* 上述的tokenData在终端输出 { id: '603e0ffa76c47f1fd08948f1', iat: 1614777342 }
-    参数id 就登录的用户id 即就是需要的数据 */
-    const { id } = jwt.verify(token, app.get('secret'));
-    // 如果id不存在报错
-    assert(id, 401, '无效的jwt token'); // 真实项目统一用 请先登录 提示
-    // 通过上述的id去数据库查找用户
-    // const user = await AdminUser.findById(id);
-    // 因为下述会使用user故挂载到req对象上去
-    req.user = await AdminUser.findById(id);
-    /* console.log(req.user);
-    输出 { _id: 603e0ffa76c47f1fd08948f1, username: 'admin', __v: 0 } */
-    // 如果用户不存在就报错 401一般是用户身份验证相关
-    assert(req.user, 401, '请先登录');
-    await next();
-  }, async (req, res) => { // 资源列表
+  router.get('/', async (req, res) => { // 资源列表
       // console.log(req.user); 和上述输出一样
       // 获取数据库中的数据
       // limit(10) 表示限制为10条数据
@@ -90,21 +62,19 @@ module.exports = app => {
     const model = await req.Model.findById(req.params.id);
     res.send(model); // 发送给前端
   });
-  
+
+  // 导入处理 校验用户是否登录 中间件 因为它返回的是一个函数使用是需加()调用
+  const authMiddleware = require('../../middleware/auth');
+  // 导入 获取模型 中间件 因为它返回的是一个函数使用是需加()调用
+  const resourceMiddleware = require('../../middleware/resource');
+
   // 拦截路由地址，挂载到express的子路由上 以使用子路由内部方法
   // /rest 表示rest通用的增删改查接口
   // /:resource 动态参数(资源) 
   // 即得到新的接口 /admin/api/rest/ +任意字符
-  // async(req, res, next)=>{...} 即表示添加中间件 就是请求前面的地址是先用该中间件处理
-  app.use('/admin/api/rest/:resource', async (req, res, next) => {
-    // 导入处理 单词的模块
-    // .classify 表示转类名的意思 如把categories转换为了Categorie
-    const modelName = require('inflection').classify(req.params.resource);
-    // 获取对应数据的模型 如 Categorie 分类数据模型
-    // req.Model 表示给请求对象上 挂载一个Model
-    req.Model = require(`../../models/${modelName}`);
-    next();
-  }, router);
+  // authMiddleware 校验用户是否登录中间件 resourceMiddleware 获取模型中间件
+  app.use('/admin/api/rest/:resource', authMiddleware(), resourceMiddleware(), router);
+
 /* 上传图片文件的接口 */
   // 引入处理上传文件从模块
   const multer = require('multer');
@@ -113,11 +83,12 @@ module.exports = app => {
     dest: __dirname + '/../../uploads', // 表示目标地址 即存放到什么位置
   });
   // upload.single('file') 表示接受单个文件的上传 file是字段名
-  app.post('/admin/api/upload', upload.single('file'), async (req, res) => {
+  app.post('/admin/api/upload', authMiddleware(), upload.single('file'), async (req, res) => {
     const file = req.file; // res.file 是加上upload.single('file')中间件才有的
     file.url = `http://localhost:3000/uploads/${file.filename}`;
     res.send(file);
   });
+
 /* 登陆接口 */
   app.post('/admin/api/login', async (req, res) => {
     // res.send('ok'); 给客户端响应的内容
