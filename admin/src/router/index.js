@@ -35,6 +35,9 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login, // 对应页面组件 
+    meta: { // 给登录页面添加属性
+      isPublic: true
+    }
   },
   {
     path: '/',
@@ -129,5 +132,18 @@ const router = new VueRouter({
   /* 把：http://localhost:8080/#/categories/create
   改为：http://localhost:8080/categories/create */
 })
+
+// 添加全局前者守卫
+// 1> to 表示 要去的页面
+// 2> from 表示 来自的页面
+// 2> next 表示 接下来的处理
+router.beforeEach((to, from, next) => {
+  // 如果访问的页面没有isPublic 而且 没有token
+  if (!to.meta.isPublic && !localStorage.token) {
+    // 就跳转到登录页面
+    return next('/login');
+  }
+  next()
+});
 
 export default router
