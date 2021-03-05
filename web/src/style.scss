@@ -1,0 +1,68 @@
+/* reset(重置) 即重置样式 */
+* {
+  box-sizing: border-box;/* 盒子模型 */
+  outline: none; /* 去掉元素默认的轮廓 */
+}
+html {
+  font-size: 13px; /* 设置页码整体默认的字体大小 */
+}
+body { 
+  margin: 0; /* body默认是有内边距的 */
+  font-family: Arial, Helvetica, sans-serif; /* 字体 */
+  line-height: 1.2em; /* 行高 */
+  background: #f1f1f1;
+}
+a {
+  color: #999; /* 默认链接文字颜色 */
+}
+/* colors 定义主颜色 */
+$colors: ( // 当变量和颜色名相同时可以把变量引起来
+  "primary": #db9e3f, // 主颜色
+  "white": #fff, 
+  "light": #f9f9f9,
+  "grey": #999, // 灰色
+  "dark-1": #343440, // 深色
+  "dark": #222,
+  "black": #000,
+);
+
+// $colorKey表示上述的"primary"，$color表示后面的值#db9e3f
+@each $colorKey, $color in $colors {
+  .text-#{$colorKey} {
+    color: $color;
+  }
+  // 上述定义好 就可使用 .text-primary 类来设置文字颜色
+  .bg-#{$colorKey} {
+    background-color: $color;
+  }
+  // 上述定义好 就可使用 .bg-primary 类来设置背景颜色
+}
+
+/* text align 文字的对其方式 */
+// each循环 $var 表示变量 list是集合可以是上述的变量$colors
+// (...)或者是直接量 如下
+@each $var in (left, center, right) {
+  .text-#{$var} { // 工具类，即会生成左中右对其
+    text-align: $var;
+  }
+  // 上述定义好 就可使用 .text-left 类 来设置文字对其方式
+}
+
+/* font size 文字大小 */
+$base-font-size: 1rem; // 基础字体大小和上述html中定义的字体大小对应
+$font-sizes: (
+  xs: 0.7692, // 最小 10px
+  sm: 0.9231, // 小 12px
+  md: 1, // 基础大小 13px
+  lg: 1.0769, // 中大 14px
+  xl: 1.2308, // 最大 16px 
+);
+@each $sizeKey, $size in $font-sizes {
+  .fs-#{$sizeKey} {
+    // $size 即对应的数值 $base-font-size 是基础大小
+    // 如上 0.7692 * 1rem = 0.7692rem
+    font-size: $size * $base-font-size;
+  }
+  // 上述定义好 就可使用 .fs-xs 类 来设置字体大小了
+  // 以后字体大小更改 修改html的字体大小即可
+}
