@@ -11,6 +11,7 @@ body {
   font-family: Arial, Helvetica, sans-serif; /* 字体 */
   line-height: 1.2em; /* 行高 */
   background: #f1f1f1;
+  -webkit-font-smoothing: antialiased; // 字体平滑 苹果设备
 }
 a {
   color: #999; /* 默认链接文字颜色 */
@@ -21,6 +22,7 @@ $colors: ( // 当变量和颜色名相同时可以把变量引起来
   "white": #fff, 
   "light": #f9f9f9,
   "grey": #999, // 灰色
+  "grey-1": #666,
   "dark-1": #343440, // 深色
   "dark": #222,
   "black": #000,
@@ -51,6 +53,7 @@ $colors: ( // 当变量和颜色名相同时可以把变量引起来
 /* font size 文字大小 */
 $base-font-size: 1rem; // 基础字体大小和上述html中定义的字体大小对应
 $font-sizes: (
+  xxs: 0.6154, // 最小 8px
   xs: 0.7692, // 最小 10px
   sm: 0.9231, // 小 12px
   md: 1, // 基础大小 13px
@@ -65,4 +68,107 @@ $font-sizes: (
   }
   // 上述定义好 就可使用 .fs-xs 类 来设置字体大小了
   // 以后字体大小更改 修改html的字体大小即可
+}
+
+/* flex 布局 */
+.d-flex { // 默认水平布局
+  display: flex;
+}
+.flex-column { // 垂直布局
+  flex-direction: column;
+}
+$flex-jc: ( // 设置元素的位置 水平方向的对其方式
+  start: flex-start, // 在起始位置 行首
+  end: flex-end, // 在末尾 行尾
+  center: center, // 在行中间
+  between: space-between, // 平均分散到该行
+  around: space-around, // 平均分散到该行 - 左右有空隙
+);
+@each $key, $value in $flex-jc {
+  .jc-#{$key} {
+    justify-content: $value;
+  }
+  // 上述完成后，就可使用 .jc-star 来让元素靠左 即设置元素的位置
+}
+
+$flex-ai: ( // 设置元素的位置 垂直方向的对其方式
+  start: flex-start, // 在顶部起始
+  end: flex-end, // 在底部起始
+  center: center, // 在垂直的中间位置
+  stretch: stretch, // 垂直分布元素
+);
+@each $key, $value in $flex-ai {
+  .ai-#{$key} {
+    align-items: $value;
+  }
+  // 上述完成后，就可使用 .ai-star 来让元素靠上/顶 即设置元素的位置
+}
+.flex-1 { // 拉伸
+  flex: 1;
+}
+.flex-grow-1 { // 拉伸
+  flex-grow: 1;
+}
+
+/* spacing 边距 */
+$spacing-types: (m: margin, p: padding); // 边距类型
+$spacing-directions: (t: top, r: right, b: bottom, l: left); // 边距方向
+$spacing-base-size: 1rem; // 单位尺寸 基本单位
+$spacing-sizes: (
+  0:0,
+  1: 0.25,
+  2: 0.5,
+  3: 1,
+  4: 1.5,
+  5: 3
+); // 尺寸
+@each $typeKey, $type in $spacing-types { // 循环边距类型
+  // .m-1
+  @each $sizeKey, $size in $spacing-sizes {
+    .#{$typeKey}-#{$sizeKey} {
+      #{$type}: $size * $spacing-base-size;
+    }
+    // 上述完成使用 .m-1 即表示 margin: 0.25rem
+  }
+  // .mx-1 .my-1
+  @each $sizeKey, $size in $spacing-sizes {
+    .#{$typeKey}x-#{$sizeKey} {
+      #{$type}-left: $size * $spacing-base-size;
+      #{$type}-right: $size * $spacing-base-size;
+    }
+    // 使用 .mx-0 即表示 margin-left: 0rem;margin-right: 0rem;
+    .#{$typeKey}y-#{$sizeKey} {
+      #{$type}-top: $size * $spacing-base-size;
+      #{$type}-bottom: $size * $spacing-base-size;
+    }
+    // 使用 .my-0 即表示 margin-top: 0rem;margin-bottom: 0rem;
+  }
+  // .mt-1
+  @each $directionKey, $direction in $spacing-directions { // 循环边距方位
+    @each $sizeKey, $size in $spacing-sizes { // 循环边距大小
+      // .mt-0 => margin-top: 0;
+      .#{$typeKey}#{$directionKey}-#{$sizeKey} {
+        #{$type}-#{$direction}: $size * $spacing-base-size;
+      }
+      // 上述定义完成后 使用 .mt-0 即表示margin-top: 0rem 设置边距
+    }
+  }
+}
+/* button 按钮 */
+.btn {
+  border: none; // 去掉按钮边框
+  border-radius: 0.1538rem; // 设置按钮圆角
+  // 默认按钮文字大小 获取上述定义的文字大小
+  font-size: map-get($font-sizes, 'sm') * $base-font-size;
+  padding: 0.2rem 0.6rem; // 按钮内边距
+}
+/* nav */
+.nav { // 设置选中后的底部边框
+  .nav-item { // 统一加透明边框 下述在加实体边框 为了使其保证居中对齐
+    border-bottom: 3px solid transparent;
+    padding-bottom: 0.2rem; // 让边框下移点距离
+    &.active { // &表示该类的上一层
+      border-bottom: 3px solid #fff;
+    }
+  }
 }
