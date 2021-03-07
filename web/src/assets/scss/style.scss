@@ -66,6 +66,9 @@ a {
 .flex-column { // 垂直布局
   flex-direction: column;
 }
+.flex-wrap { // 可以换行
+  flex-wrap: wrap;
+}
 
 @each $key, $value in $flex-jc {
   .jc-#{$key} {
@@ -136,5 +139,22 @@ a {
     &.active { // &表示该类的上一层
       border-bottom: 3px solid #fff;
     }
+  }
+}
+/* sprite 精灵图 */
+.sprite { // 精灵图的图片
+  background: url(../images/index.png) no-repeat 0 0;
+  background-size: 28.8462rem; // 375px的rem值，即二倍图
+  display: inline-block; // 转为行内元素 即可以设置宽和高
+  &.sprite-news { // 里面对应的单个图标
+    width: 1.7692rem;
+    height: 1.5385rem;
+    background-position: 63.546% 15.517%;
+  }
+  /* &.sprite-story {} 再次写 故事会 等单个图标的定位 */
+  &.sprite-arrow {
+    width: 0.7692rem;
+    height: 0.7692rem;
+    background-position: 38.577% 52.076%;
   }
 }

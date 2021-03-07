@@ -5,13 +5,14 @@ $colors: ( // 当变量和颜色名相同时可以把变量引起来
   "info": #4b67af, 
   "white": #fff, 
   "light": #f9f9f9,
+  "light-1": #d4d9de, // 边框色
   "grey": #999, // 灰色
   "grey-1": #666,
   "dark-1": #343440, // 深色
   "dark": #222,
   "black": #000,
 );
-
+$border-color: map-get($colors, 'light-1'); // 边框颜色
 /* font size 文字大小 */
 $base-font-size: 1rem; // 基础字体大小和上述html中定义的字体大小对应
 $font-sizes: (
