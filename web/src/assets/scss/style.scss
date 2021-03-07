@@ -1,4 +1,6 @@
-/* reset(重置) 即重置样式 */
+/* reset(重置) 即重置样式  存放所有样式的实现 */
+// 引用对应的样式变量
+@import './variables';
 * {
   box-sizing: border-box;/* 盒子模型 */
   outline: none; /* 去掉元素默认的轮廓 */
@@ -16,17 +18,6 @@ body {
 a {
   color: #999; /* 默认链接文字颜色 */
 }
-/* colors 定义主颜色 */
-$colors: ( // 当变量和颜色名相同时可以把变量引起来
-  "primary": #db9e3f, // 主颜色
-  "white": #fff, 
-  "light": #f9f9f9,
-  "grey": #999, // 灰色
-  "grey-1": #666,
-  "dark-1": #343440, // 深色
-  "dark": #222,
-  "black": #000,
-);
 
 // $colorKey表示上述的"primary"，$color表示后面的值#db9e3f
 @each $colorKey, $color in $colors {
@@ -45,21 +36,11 @@ $colors: ( // 当变量和颜色名相同时可以把变量引起来
 // (...)或者是直接量 如下
 @each $var in (left, center, right) {
   .text-#{$var} { // 工具类，即会生成左中右对其
-    text-align: $var;
+    text-align: $var !important;
   }
   // 上述定义好 就可使用 .text-left 类 来设置文字对其方式
 }
 
-/* font size 文字大小 */
-$base-font-size: 1rem; // 基础字体大小和上述html中定义的字体大小对应
-$font-sizes: (
-  xxs: 0.6154, // 最小 8px
-  xs: 0.7692, // 最小 10px
-  sm: 0.9231, // 小 12px
-  md: 1, // 基础大小 13px
-  lg: 1.0769, // 中大 14px
-  xl: 1.2308, // 最大 16px 
-);
 @each $sizeKey, $size in $font-sizes {
   .fs-#{$sizeKey} {
     // $size 即对应的数值 $base-font-size 是基础大小
@@ -70,6 +51,14 @@ $font-sizes: (
   // 以后字体大小更改 修改html的字体大小即可
 }
 
+/* width,height 宽度和高度样式 */
+.w-100 { // 宽度
+  width: 100%;
+}
+.h-100 { // 高度
+  height: 100%;
+}
+
 /* flex 布局 */
 .d-flex { // 默认水平布局
   display: flex;
@@ -77,13 +66,7 @@ $font-sizes: (
 .flex-column { // 垂直布局
   flex-direction: column;
 }
-$flex-jc: ( // 设置元素的位置 水平方向的对其方式
-  start: flex-start, // 在起始位置 行首
-  end: flex-end, // 在末尾 行尾
-  center: center, // 在行中间
-  between: space-between, // 平均分散到该行
-  around: space-around, // 平均分散到该行 - 左右有空隙
-);
+
 @each $key, $value in $flex-jc {
   .jc-#{$key} {
     justify-content: $value;
@@ -91,12 +74,6 @@ $flex-jc: ( // 设置元素的位置 水平方向的对其方式
   // 上述完成后，就可使用 .jc-star 来让元素靠左 即设置元素的位置
 }
 
-$flex-ai: ( // 设置元素的位置 垂直方向的对其方式
-  start: flex-start, // 在顶部起始
-  end: flex-end, // 在底部起始
-  center: center, // 在垂直的中间位置
-  stretch: stretch, // 垂直分布元素
-);
 @each $key, $value in $flex-ai {
   .ai-#{$key} {
     align-items: $value;
@@ -110,18 +87,7 @@ $flex-ai: ( // 设置元素的位置 垂直方向的对其方式
   flex-grow: 1;
 }
 
-/* spacing 边距 */
-$spacing-types: (m: margin, p: padding); // 边距类型
-$spacing-directions: (t: top, r: right, b: bottom, l: left); // 边距方向
-$spacing-base-size: 1rem; // 单位尺寸 基本单位
-$spacing-sizes: (
-  0:0,
-  1: 0.25,
-  2: 0.5,
-  3: 1,
-  4: 1.5,
-  5: 3
-); // 尺寸
+// 尺寸
 @each $typeKey, $type in $spacing-types { // 循环边距类型
   // .m-1
   @each $sizeKey, $size in $spacing-sizes {
