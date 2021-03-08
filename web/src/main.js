@@ -4,6 +4,8 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+// 引入字体图标文件
+import './assets/iconfont/iconfont.css';
 /* 引用公共样式文件 */
 import './assets/scss/style.scss';
 // 引入路由文件
