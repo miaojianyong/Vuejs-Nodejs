@@ -13,7 +13,7 @@
     <!-- 导航 首页、攻略中心、赛事中心 -->
     <div class="bg-primary pt-3 pb-2"> 
       <!-- flex布局 文字颜色 水平分别并且左右两侧有空白-->
-      <div class="nav d-flex text-white jc-around pb-1">
+      <div class="nav nav-inverse pb-1 jc-around">
         <!-- active高亮 即选中 文字底部有边框 -->
         <div class="nav-item active">
           <!-- router-link 表示连接 默认是a标签 tag设置标签类型 -->

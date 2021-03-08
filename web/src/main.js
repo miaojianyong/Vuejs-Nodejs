@@ -17,6 +17,11 @@ import 'swiper/dist/css/swiper.css'
 // 使用轮播图插件
 Vue.use(VueAwesomeSwiper, /* { default options with global component } */)
 
+// 引入卡片组件 -- 这里是全局引用 可以到具体组件中引用
+import Card from './components/Card.vue';
+// 定义全局组件
+Vue.component('m-card', Card); // 即使用m-card标签就是使用全局组件
+
 new Vue({
   router,
   render: h => h(App)

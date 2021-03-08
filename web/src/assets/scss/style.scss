@@ -133,11 +133,21 @@ a {
 }
 /* nav */
 .nav { // 设置选中后的底部边框
+  display: flex; // 导航默认flex布局 横向排列
   .nav-item { // 统一加透明边框 下述在加实体边框 为了使其保证居中对齐
     border-bottom: 3px solid transparent;
     padding-bottom: 0.2rem; // 让边框下移点距离
-    &.active { // &表示该类的上一层
-      border-bottom: 3px solid #fff;
+    &.active { // &表示该类的上一层 默认选中的项 边框颜色
+      color: map-get($colors, 'primary'); // 默认文字颜色
+      border-bottom-color: map-get($colors, 'primary');
+    }
+  }
+  &.nav-inverse { // 反色，即和上述nav-item相反的颜色
+    .nav-item {
+      color: map-get($colors, 'white');
+      &.active {
+        border-bottom-color: map-get($colors, 'white');
+      }
     }
   }
 }
