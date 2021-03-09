@@ -16,6 +16,8 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 require('./routes/admin')(app);
 // 导入数据库操作文件
 require('./plugins/db')(app);
+// 导入web端路由
+require('./routes/web')(app);
 
 app.listen(3000, () => {
   console.log('http://localhost:3000');

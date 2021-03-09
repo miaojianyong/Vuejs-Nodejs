@@ -11,6 +11,8 @@ const schema = new mongoose.Schema({
     ref: 'Category' // 关联分类模型
   }],
   body: { tpye: String }, // 文章详情
+}, { // 让文章分类自动带创建时间 和 更新时间
+  timestamps: true
 })
 // 导出物品模型
 module.exports = mongoose.model('Article', schema);

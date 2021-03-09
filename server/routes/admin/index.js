@@ -51,7 +51,7 @@ module.exports = app => {
         queryOptions.populate = 'parent'; // 给上述的对象添加属性
       };
       // setOptions(queryOptions) 查找是否有对应属性
-      const items = await req.Model.find().setOptions(queryOptions).limit(10);
+      const items = await req.Model.find().setOptions(queryOptions).limit(100);
       res.send(items); // 发送给前端
   });
 
