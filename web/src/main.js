@@ -21,6 +21,10 @@ Vue.use(VueAwesomeSwiper, /* { default options with global component } */)
 import Card from './components/Card.vue';
 // 定义全局组件
 Vue.component('m-card', Card); // 即使用m-card标签就是使用全局组件
+// 引入卡片列表组件 -- 这里是全局引用 可以到具体组件中引用
+import ListCard from './components/ListCard.vue';
+// 定义全局组件
+Vue.component('m-list-card', ListCard);
 
 new Vue({
   router,

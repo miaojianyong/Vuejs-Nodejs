@@ -30,37 +30,18 @@
     </div>
     <!-- end fo nav icons -->
     <!-- 使用全局组件 并传递参数 -->
-    <m-card icon="Menu" title="新闻资讯"> 
-      <div class="nav jc-between">
-        <div class="nav-item active">
-          <div class="nav-link">热门</div>
+    <m-list-card icon="Menu" title="新闻资讯" :categories="newsCars">
+      <!-- 使用ListCard组件中定义的具体插槽 items
+      #items="{category}" 取子组件中动态绑定的'category' -->
+      <template #items="{category}">
+        <div class="py-2" v-for="(news, i) in category.newsList" :key="i">
+          <span>[{{news.categoryName}}]</span>
+          <span>|</span>
+          <span>{{news.title}}</span>
+          <span>{{news.date}}</span>
         </div>
-        <div class="nav-item">
-          <div class="nav-link">新闻</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-link">公共</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-link">活动</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-link">赛事</div>
-        </div>
-      </div>
-      <div class="pt-3">
-        <swiper>
-          <swiper-slide v-for="m in 5" :key="m">
-            <div class="py-2" v-for="n in 5" :key="n">
-              <span>[新闻]</span>
-              <span>|</span>
-              <span>三月白情恰花开，峡谷好礼携春来</span>
-              <span>03/08</span>
-            </div>
-          </swiper-slide>
-        </swiper>
-      </div>
-    </m-card>
+      </template>
+    </m-list-card>
 
     <m-card icon="card-hero" title="英雄列表"></m-card>
     <m-card icon="card-hero" title="精彩视频"></m-card>
@@ -79,7 +60,49 @@
             el: '.pagination-home'
           },
           autoplay: { delay: 1500 }, /* 然轮播图自动滚动 */
-        }
+        },
+        newsCars: [
+          {
+            name: '热门',
+            newsList: new Array(5).fill(1).map(v => ({
+                categoryName: '公共',
+                title: '三月白情恰花开，峡谷好礼携春来',
+                date: '03/08'
+              }))
+          },
+          {
+            name: '新闻',
+            newsList: new Array(5).fill(1).map(v => ({
+                categoryName: '新闻',
+                title: '三月白情恰花开，峡谷好礼携春来',
+                date: '03/08'
+              }))
+          },
+          {
+            name: '公告',
+            newsList: new Array(5).fill(1).map(v => ({
+                categoryName: '公告',
+                title: '三月白情恰花开，峡谷好礼携春来',
+                date: '03/08'
+              }))
+          },
+          {
+            name: '活动',
+            newsList: new Array(5).fill(1).map(v => ({
+                categoryName: '活动',
+                title: '三月白情恰花开，峡谷好礼携春来',
+                date: '03/08'
+              }))
+          },
+          {
+            name: '赛事',
+            newsList: new Array(5).fill(1).map(v => ({
+                categoryName: '赛事',
+                title: '三月白情恰花开，峡谷好礼携春来',
+                date: '03/08'
+              }))
+          },
+        ]
       }
     }
   }
