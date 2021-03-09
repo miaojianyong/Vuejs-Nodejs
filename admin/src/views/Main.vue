@@ -69,7 +69,9 @@
       </el-header>
       
       <el-main>
-        <router-view></router-view>
+        <!-- 解决在分类编辑页面 直接跳转到新建分类页面时数据没有变化的问题 
+        :key="$route.path" 表示用路由的路径区分不同的页面 -->
+        <router-view :key="$route.path"></router-view>
       </el-main>
     </el-container>
   </el-container>
