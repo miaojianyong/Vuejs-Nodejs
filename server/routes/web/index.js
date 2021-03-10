@@ -23,12 +23,61 @@ module.exports = app => {
     await Article.deleteMany({}); // 清空Article数据库
     await Article.insertMany(newsList); // 插入上述数据
     res.send(newsList);
+    // 上述完成访问http://localhost:3000/web/api/news/init即可向数据库添加数据
   });
-  
-  // 展示新闻列表数据
+
+/* 新闻列表接口 */
   router.get('/news/list', async (req, res) => {
+    /* const parent = await Category.findOne({
+      name: '新闻分类'
+    }).populate({
+      path: 'children',
+      populate: {
+        path: 'newsList'
+      }
+    }).lean(); */
+    const parent = await Category.findOne({
+      name: '新闻分类'
+    });
+    // 使用MongoDB的聚合查询 即执行多次查询
+    const cats = await Category.aggregate([
+      // 1. $match 条件查询 parent._id表示上述定义parent
+      { $match: { parent: parent._id } }, // 一：过滤数据
+      // 2. $lookup 查询另外一个集合  
+      { // 二：关联查询
+        $lookup: {
+          from: 'articles', // 要查询的集合名称 集合名称是Article的小写复数形式
+          localField: '_id', // 本地键
+          foreignField: 'categories', // 外地键
+          as: 'newsList' // 定义名称
+        }
+      },
+      { // 设置要newsList中的几条数据 三：修改数据
+        $addFields: { // 添加字段 这里是修改字段
+          // 只有newsList中的5条数据
+          newsList: {$slice: ['$newsList', 5]}
+        }
+      }
+    ])
+    // 添加 热门 数据
+    const subCats = cats.map(v => v._id); // 返回上述数组中的_id参数
+    cats.unshift({ // unshift方法 在cats数组前面加数据 此处是加的对象
+      name: '热门',
+      newsList: await Article.find().where({
+        categories: { $in: subCats }
+      }).populate('categories').limit(5).lean()
+    });
+    // 循环上述数据 添加CategoryName属性 并 设置分类名称
+    cats.map(cats => {
+      cats.newsList.map(news => {
+        // 如名称是热门，就显示该分类数组的第1个数组中的name字段 否则显示对应分类名称
+        news.CategoryName = cats.name === '热门' ? news.categories[0].name : cats.name; 
+        return news
+      })
+    })
+    res.send(cats);
+  })
 
-  });
-
+  // 定义接口的前缀地址
   app.use('/web/api', router);
 }
