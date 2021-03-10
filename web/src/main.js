@@ -26,6 +26,12 @@ import ListCard from './components/ListCard.vue';
 // 定义全局组件
 Vue.component('m-list-card', ListCard);
 
+// 导入网络请求模块 
+import axios from 'axios';
+Vue.prototype.$http = axios.create({
+  baseURL: 'http://localhost:3000/web/api' // 设定接口地址
+});
+
 new Vue({
   router,
   render: h => h(App)

@@ -71,7 +71,7 @@ module.exports = app => {
     cats.map(cats => {
       cats.newsList.map(news => {
         // 如名称是热门，就显示该分类数组的第1个数组中的name字段 否则显示对应分类名称
-        news.CategoryName = cats.name === '热门' ? news.categories[0].name : cats.name; 
+        news.categoryName = cats.name === '热门' ? news.categories[0].name : cats.name; 
         return news
       })
     })

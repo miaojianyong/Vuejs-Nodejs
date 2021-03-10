@@ -34,11 +34,11 @@
       <!-- 使用ListCard组件中定义的具体插槽 items
       #items="{category}" 取子组件中动态绑定的'category' -->
       <template #items="{category}">
-        <div class="py-2" v-for="(news, i) in category.newsList" :key="i">
-          <span>[{{news.categoryName}}]</span>
-          <span>|</span>
-          <span>{{news.title}}</span>
-          <span>{{news.date}}</span>
+        <div class="py-2 fs-lg d-flex" v-for="(news, i) in category.newsList" :key="i">
+          <span class="text-info">[{{news.categoryName}}]</span>
+          <span class="px-2">|</span>
+          <span class="flex-1 text-dark-1 text-ellipsis pr-2">{{news.title}}</span>
+          <span class="text-grey-1 fs-sm">{{news.createdAt | date}}</span>
         </div>
       </template>
     </m-list-card>
@@ -52,7 +52,14 @@
 </template> 
 
 <script> 
+  // 引入处理时间格式的模块
+  import dayjs from 'dayjs';
   export default {
+    filters: { // 处理时间格式 过滤器
+      date(val) {
+        return dayjs(val).format('MM/DD');//即转换为2位数的月份和日期
+      }
+    },
     data() {
       return {
         swiperOptions: {
@@ -61,49 +68,17 @@
           },
           autoplay: { delay: 1500 }, /* 然轮播图自动滚动 */
         },
-        newsCars: [
-          {
-            name: '热门',
-            newsList: new Array(5).fill(1).map(v => ({
-                categoryName: '公共',
-                title: '三月白情恰花开，峡谷好礼携春来',
-                date: '03/08'
-              }))
-          },
-          {
-            name: '新闻',
-            newsList: new Array(5).fill(1).map(v => ({
-                categoryName: '新闻',
-                title: '三月白情恰花开，峡谷好礼携春来',
-                date: '03/08'
-              }))
-          },
-          {
-            name: '公告',
-            newsList: new Array(5).fill(1).map(v => ({
-                categoryName: '公告',
-                title: '三月白情恰花开，峡谷好礼携春来',
-                date: '03/08'
-              }))
-          },
-          {
-            name: '活动',
-            newsList: new Array(5).fill(1).map(v => ({
-                categoryName: '活动',
-                title: '三月白情恰花开，峡谷好礼携春来',
-                date: '03/08'
-              }))
-          },
-          {
-            name: '赛事',
-            newsList: new Array(5).fill(1).map(v => ({
-                categoryName: '赛事',
-                title: '三月白情恰花开，峡谷好礼携春来',
-                date: '03/08'
-              }))
-          },
-        ]
+        newsCars: [], // 存放新闻列表数据
       }
+    },
+    methods: { // 定义该组件的方法
+      async fetchNewsCats() { // 获取新闻的分类
+        const res = await this.$http.get('news/list');
+        this.newsCars = res.data; // 把请求的数据给上述变量
+      }
+    },
+    created() { // 生命周期函数 表示页面刚进来要做的事情
+      this.fetchNewsCats(); // 执行上述定义的方法
     }
   }
 </script>

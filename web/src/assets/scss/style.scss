@@ -51,6 +51,14 @@ a {
   // 以后字体大小更改 修改html的字体大小即可
 }
 
+/* 文字溢出显示三个... text overflow */
+.text-ellipsis {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* width,height 宽度和高度样式 */
 .w-100 { // 宽度
   width: 100%;

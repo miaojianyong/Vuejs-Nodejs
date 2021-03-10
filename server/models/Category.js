@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
     ref: 'Category' // 关联的模型
   }
 });
-// 创建 分类子分类
+/* // 创建 分类子分类
 schema.virtual('children', {
   localField: '_id',
   foreignField: 'parent',
@@ -24,7 +24,7 @@ schema.virtual('newsList', {
   foreignField: 'categories',
   justOne: false,
   ref: 'Article'
-});
+}); */
 
 // 导出分类模型
 module.exports = mongoose.model('Category', schema);
