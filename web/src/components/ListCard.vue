@@ -13,8 +13,9 @@
     </div>
     <div class="pt-3">
       <!-- ref="list" 给标签添加ref属性方便选择 如html中的id
-      @slide-change 表示把当前swiper的索引值给active -->
-      <swiper ref="list"
+      @slide-change 表示把当前swiper的索引值给active
+      :options="{autoHeight: true}" 自动控制高度 即内容不同高度也不同 -->
+      <swiper ref="list" :options="{autoHeight: true}"
       @slide-change="() => active = $refs.list.swiper.realIndex">
         <swiper-slide v-for="(category, i) in categories" :key="i">
           <slot name="items" :category="category"></slot>

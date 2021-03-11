@@ -108,6 +108,35 @@ module.exports = app => {
       await Hero.insertMany(cat.heroes);
     }
     res.send(await Hero.find());
+  });
+
+  // 英雄列表 接口
+  router.get('/heroes/list', async (req, res) => {
+    const parent = await Category.findOne({
+      name: '英雄分类'
+    });
+    // 使用MongoDB的聚合查询 即执行多次查询
+    const cats = await Category.aggregate([
+      { $match: { parent: parent._id } }, // 一：过滤数据
+      { // 二：关联查询
+        $lookup: {
+          from: 'heroes', // 要查询的表 即集合
+          localField: '_id', // 本地键 即在Category在的字段
+          foreignField: 'categories', // 外地键 即在heroes中的字段
+          as: 'heroList' // 定义名称
+        }
+      },
+      // 去掉修改字段，即显示查询到的所有英雄
+    ])
+    // 添加 热门 数据
+    const subCats = cats.map(v => v._id); // 返回上述数组中的_id参数
+    cats.unshift({ // unshift方法 在cats数组前面加数据 此处是加的对象
+      name: '热门',
+      heroList: await Hero.find().where({
+        categories: { $in: subCats }
+      }).limit(10).lean() // 查询10条
+    });
+    res.send(cats);
   })
 
   // 定义接口的前缀地址

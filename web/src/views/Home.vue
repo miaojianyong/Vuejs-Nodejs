@@ -43,7 +43,20 @@
       </template>
     </m-list-card>
 
-    <m-card icon="card-hero" title="英雄列表"></m-card>
+    <!-- 英雄列表 -->
+    <m-list-card icon="card-hero" title="英雄列表" :categories="heroCars">
+      <template #items="{category}">
+        <div class="d-flex flex-wrap" style="margin: 0 -0.5rem;">
+          <div class="p-2 text-center hero-list"
+          style="width: 20%;"
+          v-for="(hero, i) in category.heroList" :key="i">
+            <img :src="hero.avatar" class="w-100">
+            <div>{{hero.name}}</div>
+          </div>
+        </div>
+      </template>
+    </m-list-card>
+
     <m-card icon="card-hero" title="精彩视频"></m-card>
     <m-card icon="card-hero" title="图文攻略"></m-card>
     <m-card icon="card-hero" title="英雄列表"></m-card>
@@ -69,16 +82,22 @@
           autoplay: { delay: 1500 }, /* 然轮播图自动滚动 */
         },
         newsCars: [], // 存放新闻列表数据
+        heroCars: [], // 存放英雄列表数据
       }
     },
     methods: { // 定义该组件的方法
       async fetchNewsCats() { // 获取新闻的分类
         const res = await this.$http.get('news/list');
         this.newsCars = res.data; // 把请求的数据给上述变量
+      },
+      async fetchHeroCats() { // 获取英雄的分类
+        const res = await this.$http.get('heroes/list');
+        this.heroCars = res.data; // 把请求的数据给上述变量
       }
     },
     created() { // 生命周期函数 表示页面刚进来要做的事情
       this.fetchNewsCats(); // 执行上述定义的方法
+      this.fetchHeroCats();
     }
   }
 </script>
@@ -104,6 +123,11 @@
     &:nth-child(4n) { /* 4个和其倍数去掉边框 */
       border-right: none;
     }
+  }
+}
+.hero-list  { 
+  img { /* 设置英雄头像的圆角 */
+    border-radius: 0.1538rem;
   }
 }
 </style>
