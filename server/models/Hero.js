@@ -52,4 +52,5 @@ const schema = new mongoose.Schema({
   }]
 })
 // 导出物品模型
-module.exports = mongoose.model('Hero', schema);
+// 手动指定数据中的模型名称 heroes 数据库默认是heros即首字母小写后面加s
+module.exports = mongoose.model('Hero', schema, 'heroes');
