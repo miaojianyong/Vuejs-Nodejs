@@ -139,6 +139,17 @@ module.exports = app => {
     res.send(cats);
   })
 
+  // 文章详情 接口
+  router.get('/articles/:id', async (req, res) => {
+    // 通过id查找文章 .lean()表示查询的数据变为json对象
+    const data = await Article.findById(req.params.id).lean();
+    // 添加字段
+    data.related = await Article.find().where({
+      categories: { $in: data.categories } // 查询根当前数据相同分类的数据
+    }).limit(2); // 两条数据
+    res.send(data);
+  });
+
   // 定义接口的前缀地址
   app.use('/web/api', router);
 }

@@ -32,14 +32,21 @@
     <!-- 使用全局组件 并传递参数 -->
     <m-list-card icon="Menu" title="新闻资讯" :categories="newsCars">
       <!-- 使用ListCard组件中定义的具体插槽 items
-      #items="{category}" 取子组件中动态绑定的'category' -->
+      #items="{category}" 取子组件中动态绑定的'category'
+      把下述标签变为可点击跳转的路由标签 即router-link
+      设置tag为div,即默认router-link是a标签
+      动态设置:to=“” 即点击后跳转的地址 -->
       <template #items="{category}">
-        <div class="py-2 fs-lg d-flex" v-for="(news, i) in category.newsList" :key="i">
+        <router-link 
+        tag="div"
+        :to="`/articles/${news._id}`"
+        class="py-2 fs-lg d-flex" 
+        v-for="(news, i) in category.newsList" :key="i">
           <span class="text-info">[{{news.categoryName}}]</span>
           <span class="px-2">|</span>
           <span class="flex-1 text-dark-1 text-ellipsis pr-2">{{news.title}}</span>
           <span class="text-grey-1 fs-sm">{{news.createdAt | date}}</span>
-        </div>
+        </router-link>
       </template>
     </m-list-card>
 

@@ -18,6 +18,9 @@ body {
 a {
   color: #999; /* 默认链接文字颜色 */
 }
+p {
+  line-height: 1.5rem;
+}
 
 // $colorKey表示上述的"primary"，$color表示后面的值#db9e3f
 @each $colorKey, $color in $colors {
@@ -175,4 +178,12 @@ a {
     height: 0.7692rem;
     background-position: 38.577% 52.076%;
   }
+}
+
+// borders 边框
+@each $dir in (top, right, bottom, left) {
+  .border-#{$dir} {
+    border-#{$dir}: 1px solid $border-color;
+  }
+  // 上述完成 可使用 .border-top 添加上边框等样式
 }

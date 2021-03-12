@@ -2,16 +2,18 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Main from '../views/Main.vue' // 主页面组件
+import Article from '../views/Article.vue' // 文章详情组件
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'main',
     component: Main,
     children: [
-      {path: '/', name: 'home', component: Home}
+      { path: '/', name: 'home', component: Home },
+      // 文章详情路由，对应文章的id props: true 表示该路由接收参数
+      { path: '/articles/:id', name: 'article', component: Article, props: true},
     ]
   },
   {
