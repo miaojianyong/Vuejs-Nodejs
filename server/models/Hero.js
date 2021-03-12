@@ -9,6 +9,9 @@ const schema = new mongoose.Schema({
   avatar: { // 英雄头像
     type: String, // 在数据库保存图片地址
   },
+  banner: { // 英雄图片
+    type: String, // 在数据库保存图片地址
+  },
   title: { // 称号 如后裔称呼是 半神之弓
     type: String,
   },
@@ -26,6 +29,8 @@ const schema = new mongoose.Schema({
   skills: [{ // 技能
     icon: { type: String }, // 技能图标
     name: { type: String }, // 技能名称
+    delay: { type: String }, // 技能冷却值
+    cost: { type: String }, // 技能消耗
     description: { type: String }, // 技能介绍
     tips: { type: String }, // 技能小提示
   }],

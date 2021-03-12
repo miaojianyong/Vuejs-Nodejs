@@ -1,8 +1,7 @@
 <template>
 	<div>
 		<h1>{{id ? '编辑' : '新建'}}英雄</h1>
-		<el-form label-width="120px" 
-				@submit.native.prevent="save">
+		<el-form label-width="120px" @submit.native.prevent="save">
 			<!-- value="basic" 表示默认显示对应下的name中的参数 -->
 			<el-tabs type="border-card" value="basic">
 				<el-tab-pane label="基本信息" name="basic">
@@ -16,15 +15,30 @@
 					<el-form-item label="头像">
 						<el-upload
 							class="avatar-uploader"
-							:action="$http.defaults.baseURL + '/upload'"
+							:action="uploadUrl"
+							:headers="getAuthHeaders()"
 							:show-file-list="false"
-							:on-success="afterUpload">
+							:on-success="res => $set(model, 'avatar', res.url)">
 							<!-- 如果有上传的图片就显示 该图片地址 -->
 							<img v-if="model.avatar" :src="model.avatar" class="avatar">
 							<!-- 没有上传的图片就显示 上传的图片的图标 -->
 							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 						</el-upload>
 					</el-form-item>
+
+					<!-- 英雄图片 即英雄效果宣传图 -->
+					<el-form-item label="Banner">
+						<el-upload
+							class="avatar-uploader"
+							:action="uploadUrl"
+							:headers="getAuthHeaders()"
+							:show-file-list="false"
+							:on-success="res => $set(model, 'banner', res.url)"> <!-- 把上传的图片显示在页面中 -->
+							<img v-if="model.banner" :src="model.banner" class="avatar">
+							<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+						</el-upload>
+					</el-form-item>
+
 					<el-form-item label="类型">
 						<!-- multiple 表示可多选下菜单中的功能 -->
 						<el-select v-model="model.categories" multiple>
@@ -97,12 +111,19 @@
 								"res => $set(item, 'icon', res.url)" 把接收到的url赋值给icon -->
 								<el-upload
 									class="avatar-uploader"
-									:action="$http.defaults.baseURL + '/upload'"
+									:action="uploadUrl"
+									:headers="getAuthHeaders()"
 									:show-file-list="false"
 									:on-success="res => $set(item, 'icon', res.url)">
 									<img v-if="item.icon" :src="item.icon" class="avatar">
 									<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 								</el-upload>
+							</el-form-item>
+							<el-form-item label="冷却值">
+								<el-input v-model="item.delay"></el-input>
+							</el-form-item>
+							<el-form-item label="消耗">
+								<el-input v-model="item.cost"></el-input>
 							</el-form-item>
 							<el-form-item label="描述">
 								<el-input v-model="item.description" type="textarea"></el-input>
@@ -114,6 +135,29 @@
 								<!-- splice 删除数组中的元素 -->
 								<el-button size="small" type="danger"
 								@click="model.skills.splice(i, 1)">删除</el-button>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-tab-pane>
+				<!-- 英雄关系 -->
+				<el-tab-pane label="最佳搭档" name="partners">
+					<el-button size="small" @click="model.partners.push({})"><i class="el-icon-plus"></i> 添加英雄</el-button>
+					<el-row type="flex" style="flex-wrap: wrap;">
+						<el-col :md="12" v-for="(item, i) in model.partners" :key="i">
+							<el-form-item label="英雄">
+								<!-- 选择英雄  filterable 表示可在下拉菜单搜索数据 -->
+								<el-select filterable v-model="item.hero">
+									<!-- 循环下拉菜单中的英雄选项 -->
+									<el-option v-for="hero in heroes" :key="hero._id"
+									:value="hero._id" :label="hero.name"></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item label="描述">
+								<el-input v-model="item.description" type="textarea"></el-input>
+							</el-form-item>
+							<el-form-item>
+								<el-button size="small" type="danger"
+								@click="model.partners.splice(i, 1)">删除</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -136,7 +180,9 @@
 				items: [], // 存放英雄出装数据 下拉菜单中数据
 				model: { // 新建英雄是存放的数据
 					// 存放英雄的技能 否则在新建英雄的技能页面会报错 即找不到push
-					skills: [], 
+					skills: [], // 技能
+					partners: [], // 搭档
+					heroes: [], // 存放搭档的英雄
 					name: '', // 名称
 					avatar: '', // 头像
 					scores: { // 英雄评分
@@ -149,11 +195,11 @@
 			}
 		},
 		methods: {
-			afterUpload(res) { // res是服务器端响应的数据
+			/* afterUpload(res) { // res是服务器端响应的数据
 				// this.$set(this.model, 'avatar', res.url);
 				// 上述data中的model中定义了属性就可用下述方法赋值
 				this.model.avatar = res.url;
-			},
+			}, */
 			async save() {
 				let res // 定义变量
 				if (this.id) { // 如果有id参数
@@ -180,6 +226,10 @@
 			async fetchItems() { // 请求数据 获取下拉菜单中的英雄装备数据
 				const res = await this.$http.get(`rest/items`);
 				this.items = res.data; // 把获取的数据给上述model
+			},
+			async fetchHeroes() { // 请求数据 获取下拉菜单中的搭档英雄数据
+				const res = await this.$http.get(`rest/heroes`);
+				this.heroes = res.data; // 把获取的数据给上述model
 			}
 		},
 		created() { // 组件创建成功 就执行的代码
@@ -187,7 +237,12 @@
 			this.id && this.fetch(); // 调用上述获取输入框中的数据
 			this.fetchCategories(); // 执行上述获取英雄分类数据方法 
 			this.fetchItems(); // 执行上述获取英雄装备数据方法
+			this.fetchHeroes();
 		}
 	}
 </script>
-<style></style>
+<style>
+	.el-input--suffix .el-input__inner {
+		padding-right: 0;
+	}
+</style>
