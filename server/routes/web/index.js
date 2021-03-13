@@ -153,7 +153,10 @@ module.exports = app => {
   // 英雄详情 接口
   router.get('/heroes/:id', async (req, res) => {
     // 通过id操作英雄数据 .lean()表示查询的数据变为json对象 方便加参数
-    const data = await Hero.findById(req.params.id).lean();
+    const data = await Hero
+      .findById(req.params.id)
+      .populate('categories') // 关联查询 即分类详情不仅仅是id
+      .lean();
     res.send(data);
   });
 
