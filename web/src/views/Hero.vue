@@ -31,6 +31,101 @@
         </div>
       </div>
     </div>
+    <!-- end of top  -->
+    <div>
+      <div class="bg-white px-2">
+        <div class="nav d-flex jc-around pt-3 pb-2 border-bottom">
+          <div class="nav-item active">
+            <div class="nav-link">英雄初识</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-link">进阶攻略</div>
+          </div>
+        </div>
+      </div>
+      <swiper>
+        <!-- 第1页 -->
+        <swiper-slide>
+          <div>
+            <div class="p-3 bg-white border-bottom">
+              <div class="d-flex">
+                <router-link tag="button" to="/" class="btn btn-lg flex-1">
+                  <i class="iconfont icon-Menu"></i>
+                  英雄介绍视频
+                </router-link>
+                <router-link tag="button" to="/" class="btn btn-lg flex-1 ml-2">
+                  <i class="iconfont icon-Menu"></i>
+                  一图识英雄
+                </router-link>
+              </div>
+              <!-- skills 技能 -->
+              <div class="skills mt-4">
+                <!-- 技能图标 -->
+                <div class="d-flex jc-around">
+                  <img :src="item.icon" 
+                  v-for="(item, i) in model.skills"
+                  :key="item.name"
+                  class="icon"
+                  :class="{active: currentSkillIndex === i}"
+                  @click="currentSkillIndex = i">
+                </div>
+                <!-- 技能图标 对应的描述信息 -->
+                <div v-if="currentSkill">
+                  <div class="d-flex pt-4 pb-3"> <!-- 技能名称 -->
+                    <h3 class="m-0">{{currentSkill.name}}</h3>
+                    <span class="text-grey-1 ml-4 fs-xs">
+                      (冷却值：{{currentSkill.delay}} 
+                      消耗：{{currentSkill.cost}})
+                    </span>
+                  </div>
+                  <p>{{currentSkill.description}}</p><!-- 技能描述 -->
+                  <div class="border-bottom"></div>
+                  <p class="text-grey-1">小提示：{{currentSkill.tips}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- 出装推荐 -->
+            <m-card plain icon="card-hero" title="出装推荐" class="hero-items">
+              <div class="fs-xl">顺风出装</div>
+              <div class="d-flex jc-around text-center mt-3">
+                <div v-for="item in model.items1" :key="item.name">
+                  <img :src="item.icon" class="icon">
+                  <div class="fs-xs">{{item.name}}</div>
+                </div>
+              </div>
+              <div class="border-bottom mt-3"></div>
+              <div class="fs-xl mt-3">逆风出装</div>
+              <div class="d-flex jc-around text-center mt-3">
+                <div v-for="item in model.items2" :key="item.name">
+                  <img :src="item.icon" class="icon">
+                  <div class="fs-xs">{{item.name}}</div>
+                </div>
+              </div>
+            </m-card>
+            <m-card plain icon="card-hero" title="使用技巧">
+              <p class="m-0">{{model.usageTips}}</p>
+            </m-card>
+            <m-card plain icon="card-hero" title="对抗技巧">
+              <p class="m-0">{{model.battleTips}}</p>
+            </m-card>
+            <m-card plain icon="card-hero" title="团战思路">
+              <p class="m-0">{{model.teamTips}}</p>
+            </m-card>
+            <m-card plain icon="card-hero" title="英雄关系">
+              <div class="fs-xl">最佳搭档</div>
+              <div v-for="item in model.partners" 
+              :key="item.name" class="d-flex pt-3">
+                <img :src="item.hero.avatar" height="50">
+                <p class="flex-1  m-0 ml-3">{{item.description}}</p>
+              </div>
+              <div class="border-bottom mt-3"></div>
+            </m-card>
+          </div>
+        </swiper-slide>
+        <!-- 第2页 -->
+        <swiper-slide></swiper-slide>
+      </swiper>
+    </div>
   </div>
 </template>
 
@@ -42,6 +137,13 @@
     data() {
       return {
         model: null, // 存放英雄数据
+        currentSkillIndex: 0, // 存储当前技能的索引值
+      }
+    },
+    computed: { // 计算属性
+      // 基于当前技能索引值 获取当前技能
+      currentSkill() {
+        return this.model.skills[this.currentSkillIndex];
       }
     },
     methods: { // 定义方法
@@ -57,6 +159,7 @@
 </script>
 
 <style lang="scss">
+  @import '../assets/scss/_variables.scss';
   .page-hero {
     .top { /* 设置背景图样式 */
       height: 50vw;
@@ -78,6 +181,24 @@
           font-size: 0.6rem;
           border: 1px solid rgba(255,255,255,.2);
         }
+      }
+    }
+    .skills {
+      img.icon { /* 选中技能时的边框 */
+        width: 70px;
+        height: 70px;
+        border: 3px solid map-get($colors, 'white');
+        &.active {
+          border-color: map-get($colors, 'primary');
+        }
+        border-radius: 45%;
+      }
+    }
+    .hero-items {
+      img.icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
       }
     }
   }

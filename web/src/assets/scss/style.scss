@@ -141,6 +141,22 @@ p {
   // 默认按钮文字大小 获取上述定义的文字大小
   font-size: map-get($font-sizes, 'sm') * $base-font-size;
   padding: 0.2rem 0.6rem; // 按钮内边距
+  &.btn-lg { // 大按钮样式 &表示 .btn.btn-lg
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    i {
+      color: map-get($colors, 'primary');
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+    background: map-get($colors, 'white-1');
+    border: 1px solid map-get($colors, 'white-2');
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border-radius: .4rem;
+  }
 }
 /* nav */
 .nav { // 设置选中后的底部边框

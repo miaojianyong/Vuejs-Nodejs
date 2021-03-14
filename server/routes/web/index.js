@@ -155,7 +155,8 @@ module.exports = app => {
     // 通过id操作英雄数据 .lean()表示查询的数据变为json对象 方便加参数
     const data = await Hero
       .findById(req.params.id)
-      .populate('categories') // 关联查询 即分类详情不仅仅是id
+      // 关联查询 即分类详情 顺风/逆风出装 不仅仅是id
+      .populate('categories items1 items2 partners.hero') 
       .lean();
     res.send(data);
   });
