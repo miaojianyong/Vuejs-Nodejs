@@ -5,7 +5,10 @@ import Vue from 'vue';
 import router from './router/index'; // 引入路由文件
 // 创建实例
 const http = axios.create({
-  baseURL: 'http://localhost:3000/admin/api' // 设置后台接口
+  // process.env 表示环境变量里面有 VUE_APP_API_URL 这个变量
+  // VUE_APP_API_URL 它才是真正的接口地址
+  baseURL: process.env.VUE_APP_API_URL || '/admin/api',
+  // baseURL: 'http://localhost:3000/admin/api' 设置后台接口
 });
 
 // 创建拦截器 给所有请求添加请求头
