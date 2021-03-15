@@ -11,6 +11,7 @@ app.use(require('cors')());
 app.use(express.json());
 // 托管静态资源文件 static表示静态的
 app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use('/', express.static(__dirname + '/admin'));
 // 导入路由后台路由  
 // (app)表示把app实例传递给该文件.在该文件内部就可使用
 require('./routes/admin')(app);
